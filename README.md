@@ -5,7 +5,7 @@ Using cron expression to schedule functions. c++
 
 This code using a cron parser, author staticlibs.net 
 
-[ccronexpr](github.com/staticlibs/ccronexpr)
+https://github.com/staticlibs/ccronexpr
 
 ## purpose
 
