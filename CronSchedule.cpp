@@ -12,7 +12,8 @@ CronJob::~CronJob()
 
 void CronJob::Reset()
 {
-	m_nJobId = m_nUserData = 0;
+	m_nUserData = nullptr;
+	m_nJobId = 0;
 	m_fnCallback = NULL;
 	m_tmNext = 0;
 	m_bDeleteFlag = false;
@@ -104,7 +105,7 @@ CronJobScheduler::~CronJobScheduler()
 	Clear();
 }
 
-bool CronJobScheduler::AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, int _nArg)
+bool CronJobScheduler::AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, void* _nArg)
 {
 	CronJob* pJob = new CronJob;
 	if(!pJob->Parse(_pszCronExpr))

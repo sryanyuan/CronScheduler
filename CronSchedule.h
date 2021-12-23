@@ -3,9 +3,11 @@
 //////////////////////////////////////////////////////////////////////////
 #include "ccronexpr.h"
 #include <list>
+#include <functional>
 //////////////////////////////////////////////////////////////////////////
 //	if return none-zero, this job will be deleted
-typedef int (*FUNC_CRONCALLBACK)(int, int);
+//typedef int (*FUNC_CRONCALLBACK)(int, int);
+typedef std::function<int(int, void*)> FUNC_CRONCALLBACK;
 //////////////////////////////////////////////////////////////////////////
 class CronJobScheduler;
 
@@ -37,7 +39,7 @@ public:
 
 private:
 	int m_nJobId;
-	int m_nUserData;
+	void* m_nUserData;
 	FUNC_CRONCALLBACK m_fnCallback;
 
 	time_t m_tmNext;
@@ -56,7 +58,7 @@ public:
 public:
 	void Update();
 
-	bool AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, int _nArg);
+	bool AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, void* _nArg);
 	int RemoveCronJob(int _nJobId);
 	void Clear();
 
