@@ -13,7 +13,7 @@ CronJob::~CronJob()
 void CronJob::Reset()
 {
 	m_nUserData = nullptr;
-	m_nJobId = 0;
+    m_sJobId = "";
 	m_fnCallback = NULL;
 	m_tmNext = 0;
 	m_bDeleteFlag = false;
@@ -67,7 +67,7 @@ int CronJob::Trigger()
 		return 0;
 	}
 
-	return m_fnCallback(m_nJobId, m_nUserData);
+	return m_fnCallback(m_sJobId, m_nUserData);
 }
 
 void CronJob::GetNext()
@@ -105,7 +105,7 @@ CronJobScheduler::~CronJobScheduler()
 	Clear();
 }
 
-bool CronJobScheduler::AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, void* _nArg)
+bool CronJobScheduler::AddCronJob(std::string _sJobId, const char* _pszCronExpr, FUNC_CRONCALLBACK _fnCb, void* _nArg)
 {
 	CronJob* pJob = new CronJob;
 	if(!pJob->Parse(_pszCronExpr))
@@ -115,7 +115,7 @@ bool CronJobScheduler::AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CR
 		return false;
 	}
 
-	pJob->m_nJobId = _nJobId;
+	pJob->m_sJobId = _sJobId;
 	pJob->m_nUserData = _nArg;
 	pJob->m_fnCallback = _fnCb;
 	pJob->GetNext();
@@ -127,7 +127,7 @@ bool CronJobScheduler::AddCronJob(int _nJobId, const char* _pszCronExpr, FUNC_CR
 	return true;
 }
 
-int CronJobScheduler::RemoveCronJob(int _nJobId)
+int CronJobScheduler::RemoveCronJob(std::string _sJobId)
 {
 	int nCount = 0;
 	CronJobList::iterator it = m_xCronJobList.begin();
@@ -138,7 +138,7 @@ int CronJobScheduler::RemoveCronJob(int _nJobId)
 	{
 		CronJob* pJob = *it;
 
-		if(pJob->m_nJobId == _nJobId)
+		if(pJob->m_sJobId == _sJobId)
 		{
 			//	remove, this function may be invoked in callback function,
 			//	so we can't remove it directly, we need delete it later
